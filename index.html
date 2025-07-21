@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة إدارة الأعمال - الكلية التقنية بالجموم</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=O4-K9pMSB9dhmoIUf0u529IS0SBwC7co7MhQluohzoGxqn9eYf9LC_c9HC2H_wDAVNc9TZjke4z-OJfoFc1NR-CfA74lwMtBZRJg0z2h_f9Ap6Rj5EujChfT7HpmG-DdHV211qk-DnRgRbGDEeG_YOwUD_udft5R7z4hlyUITQMRClqwckZqE2jB2cQIjdXWV9mSOsDv8zFpPsH5DGHMRbOS7jnGYzfLSo7rKFL9kvnUVK6kLewQiq_cca13AYpIxvqgYsDwucmZhPqa4iaNzXnjtx-vFixmxJV6tXJvnhLpPrzK4FeeJdEaheNlv2rn8OmpCTDWECcf92khYuiM-mITmOG_L5RnaywmpD0h_0htEVxLumX6BqHOyzZtvLWE43MRkE25qEZfR0O5u5IvnK5MKDdi48Ami3Yl0O5Kq3I" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .sidebar {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hidden { display: none !important; }
+        
+        .task-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+        
+        .task-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .status-pending { border-left-color: #fbbf24; }
+        .status-progress { border-left-color: #3b82f6; }
+        .status-completed { border-left-color: #10b981; }
+        
+        .calendar-day {
+            min-height: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 5px 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            height: 8px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card w-full max-w-md p-8 animate-fade-in">
+            <div class="text-center mb-8">
+                <i class="fas fa-graduation-cap text-6xl text-blue-600 mb-4"></i>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">منصة إدارة الأعمال</h1>
+                <p class="text-gray-600">الكلية التقنية بالجموم</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">نوع المستخدم</label>
+                    <select id="userType" class="form-input w-full p-3 text-gray-700">
+                        <option value="">اختر نوع المستخدم</option>
+                        <option value="deputy">وكيل الكلية لشؤون المدربين</option>
+                        <option value="head">رئيس قسم تدريبي</option>
+                        <option value="trainer">مدرب</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">اسم المستخدم</label>
+                    <input type="text" id="username" class="form-input w-full p-3 text-gray-700" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">كلمة المرور</label>
+                    <input type="password" id="password" class="form-input w-full p-3 text-gray-700" required>
+                </div>
+                
+                <button type="submit" class="btn-primary w-full text-white py-3 px-6 rounded-lg font-medium">
+                    <i class="fas fa-sign-in-alt ml-2"></i>
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden">
+        <!-- Sidebar -->
+        <div class="sidebar fixed right-0 top-0 h-full w-80 z-50 p-6">
+            <div class="text-center mb-8">
+                <i class="fas fa-graduation-cap text-4xl text-white mb-3"></i>
+                <h2 class="text-white text-xl font-bold">منصة إدارة الأعمال</h2>
+                <p class="text-gray-200 text-sm">الكلية التقنية بالجموم</p>
+            </div>
+            
+            <div class="mb-6">
+                <div class="glass-effect rounded-lg p-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-2xl text-white ml-3"></i>
+                        <div>
+                            <p class="text-white font-medium" id="userWelcome">مرحباً</p>
+                            <p class="text-gray-200 text-sm" id="userRole">المستخدم</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="space-y-2">
+                <a href="#" class="nav-item active flex items-center p-3 text-white" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt w-5 ml-3"></i>
+                    لوحة التحكم
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-white" onclick="showSection('tasks')">
+                    <i class="fas fa-tasks w-5 ml-3"></i>
+                    إدارة المهام
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-white" onclick="showSection('calendar')">
+                    <i class="fas fa-calendar-alt w-5 ml-3"></i>
+                    التقويم التدريبي
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-white" onclick="showSection('statistics')">
+                    <i class="fas fa-chart-bar w-5 ml-3"></i>
+                    الإحصائيات
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-white" onclick="showSection('data')">
+                    <i class="fas fa-database w-5 ml-3"></i>
+                    إدارة البيانات
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-white" onclick="showSection('reports')">
+                    <i class="fas fa-file-excel w-5 ml-3"></i>
+                    التقارير
+                </a>
+            </nav>
+            
+            <div class="absolute bottom-6 left-6 right-6">
+                <button onclick="logout()" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors">
+                    <i class="fas fa-sign-out-alt ml-2"></i>
+                    تسجيل الخروج
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="mr-80 min-h-screen">
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="section p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">لوحة التحكم</h1>
+                    <p class="text-gray-200">نظرة عامة على أداء الكلية والمهام</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card rounded-2xl p-6 text-center">
+                        <i class="fas fa-tasks text-4xl text-blue-600 mb-3"></i>
+                        <h3 class="text-2xl font-bold text-white mb-1" id="totalTasks">0</h3>
+                        <p class="text-gray-200">إجمالي المهام</p>
+                    </div>
+                    <div class="stat-card rounded-2xl p-6 text-center">
+                        <i class="fas fa-clock text-4xl text-yellow-500 mb-3"></i>
+                        <h3 class="text-2xl font-bold text-white mb-1" id="pendingTasks">0</h3>
+                        <p class="text-gray-200">مهام معلقة</p>
+                    </div>
+                    <div class="stat-card rounded-2xl p-6 text-center">
+                        <i class="fas fa-check-circle text-4xl text-green-500 mb-3"></i>
+                        <h3 class="text-2xl font-bold text-white mb-1" id="completedTasks">0</h3>
+                        <p class="text-gray-200">مهام مكتملة</p>
+                    </div>
+                    <div class="stat-card rounded-2xl p-6 text-center">
+                        <i class="fas fa-users text-4xl text-purple-500 mb-3"></i>
+                        <h3 class="text-2xl font-bold text-white mb-1" id="totalTrainers">0</h3>
+                        <p class="text-gray-200">عدد المدربين</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">آخر المهام</h3>
+                        <div id="recentTasks" class="space-y-4">
+                            <!-- Recent tasks will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">التقدم الأسبوعي</h3>
+                        <div style="height: 300px;">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div id="tasksSection" class="section hidden p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">إدارة المهام</h1>
+                    <p class="text-gray-200">إنشاء وإدارة مهام الكلية</p>
+                </div>
+                
+                <div class="card p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">إنشاء مهمة جديدة</h2>
+                        <button onclick="toggleTaskForm()" class="btn-primary text-white py-2 px-4 rounded-lg">
+                            <i class="fas fa-plus ml-2"></i>
+                            مهمة جديدة
+                        </button>
+                    </div>
+                    
+                    <div id="taskForm" class="hidden">
+                        <form id="newTaskForm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">عنوان المهمة</label>
+                                    <input type="text" id="taskTitle" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">الأولوية</label>
+                                    <select id="taskPriority" class="form-input w-full p-3 text-gray-700">
+                                        <option value="low">منخفضة</option>
+                                        <option value="medium">متوسطة</option>
+                                        <option value="high">عالية</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">القسم المستهدف</label>
+                                    <select id="taskDepartment" class="form-input w-full p-3 text-gray-700">
+                                        <option value="">اختر القسم</option>
+                                        <option value="all">جميع الأقسام</option>
+                                        <option value="computer">الحاسب الآلي</option>
+                                        <option value="electrical">الكهرباء</option>
+                                        <option value="mechanical">الميكانيكا</option>
+                                        <option value="civil">المدني</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">تاريخ الاستحقاق</label>
+                                    <input type="date" id="taskDueDate" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <label class="block text-gray-700 text-sm font-medium mb-2">وصف المهمة</label>
+                                <textarea id="taskDescription" class="form-input w-full p-3 text-gray-700 h-32" placeholder="أدخل وصف تفصيلي للمهمة..."></textarea>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <button type="submit" class="btn-primary text-white py-3 px-6 rounded-lg font-medium">
+                                    <i class="fas fa-save ml-2"></i>
+                                    حفظ المهمة
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">قائمة المهام</h2>
+                    <div class="mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="filterTasks('all')" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition-colors">جميع المهام</button>
+                            <button onclick="filterTasks('pending')" class="bg-yellow-200 hover:bg-yellow-300 px-4 py-2 rounded-lg transition-colors">معلقة</button>
+                            <button onclick="filterTasks('progress')" class="bg-blue-200 hover:bg-blue-300 px-4 py-2 rounded-lg transition-colors">قيد التنفيذ</button>
+                            <button onclick="filterTasks('completed')" class="bg-green-200 hover:bg-green-300 px-4 py-2 rounded-lg transition-colors">مكتملة</button>
+                        </div>
+                    </div>
+                    <div id="tasksList" class="space-y-4">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            <div id="calendarSection" class="section hidden p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">التقويم التدريبي</h1>
+                    <p class="text-gray-200">18 أسبوع تدريبي (الأحد - الخميس)</p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">التقويم التدريبي</h2>
+                        <div class="flex items-center gap-4">
+                            <button onclick="prevWeek()" class="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <span id="currentWeek" class="font-medium text-gray-700">الأسبوع 1</span>
+                            <button onclick="nextWeek()" class="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="calendar" class="grid grid-cols-5 gap-2">
+                        <!-- Calendar will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div id="statisticsSection" class="section hidden p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">الإحصائيات</h1>
+                    <p class="text-gray-200">تحليل الأداء والإنتاجية</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">توزيع المهام</h3>
+                        <div style="height: 400px;">
+                            <canvas id="tasksChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">الأداء الشهري</h3>
+                        <div style="height: 400px;">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">إحصائيات الأقسام</h3>
+                        <div style="height: 400px;">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">معدل الإنجاز</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-700">الحاسب الآلي</span>
+                                    <span class="text-gray-600">85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-700">الكهرباء</span>
+                                    <span class="text-gray-600">92%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-700">الميكانيكا</span>
+                                    <span class="text-gray-600">78%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-700">المدني</span>
+                                    <span class="text-gray-600">88%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar" style="width: 88%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management Section -->
+            <div id="dataSection" class="section hidden p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">إدارة البيانات</h1>
+                    <p class="text-gray-200">إدارة الأقسام والمدربين والإعدادات</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">إدارة الأقسام</h3>
+                        <form id="departmentForm" class="mb-6">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">اسم القسم</label>
+                                    <input type="text" id="departmentName" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">رئيس القسم</label>
+                                    <input type="text" id="departmentHead" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">الوصف</label>
+                                    <textarea id="departmentDescription" class="form-input w-full p-3 text-gray-700 h-24"></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary text-white py-2 px-4 rounded-lg">
+                                    <i class="fas fa-plus ml-2"></i>
+                                    إضافة القسم
+                                </button>
+                            </div>
+                        </form>
+                        <div id="departmentsList" class="space-y-3">
+                            <!-- Departments will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">إدارة المدربين</h3>
+                        <form id="trainerForm" class="mb-6">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">اسم المدرب</label>
+                                    <input type="text" id="trainerName" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">القسم</label>
+                                    <select id="trainerDepartment" class="form-input w-full p-3 text-gray-700">
+                                        <option value="">اختر القسم</option>
+                                        <option value="computer">الحاسب الآلي</option>
+                                        <option value="electrical">الكهرباء</option>
+                                        <option value="mechanical">الميكانيكا</option>
+                                        <option value="civil">المدني</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">التخصص</label>
+                                    <input type="text" id="trainerSpecialty" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-medium mb-2">البريد الإلكتروني</label>
+                                    <input type="email" id="trainerEmail" class="form-input w-full p-3 text-gray-700" required>
+                                </div>
+                                <button type="submit" class="btn-primary text-white py-2 px-4 rounded-lg">
+                                    <i class="fas fa-user-plus ml-2"></i>
+                                    إضافة المدرب
+                                </button>
+                            </div>
+                        </form>
+                        <div id="trainersList" class="space-y-3">
+                            <!-- Trainers will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6 mt-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">إعدادات النظام</h3>
+                    <form id="settingsForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2">اسم الكلية</label>
+                                <input type="text" id="collegeName" class="form-input w-full p-3 text-gray-700" value="الكلية التقنية بالجموم">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2">عدد أسابيع التدريب</label>
+                                <input type="number" id="trainingWeeks" class="form-input w-full p-3 text-gray-700" value="18">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2">تاريخ بداية التدريب</label>
+                                <input type="date" id="trainingStart" class="form-input w-full p-3 text-gray-700">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2">تاريخ نهاية التدريب</label>
+                                <input type="date" id="trainingEnd" class="form-input w-full p-3 text-gray-700">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn-primary text-white py-3 px-6 rounded-lg font-medium">
+                                <i class="fas fa-save ml-2"></i>
+                                حفظ الإعدادات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reportsSection" class="section hidden p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">التقارير</h1>
+                    <p class="text-gray-200">تصدير البيانات والإحصائيات</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-file-excel text-4xl text-green-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير المهام</h3>
+                        <p class="text-gray-600 text-sm mb-4">تصدير جميع المهام والحالات</p>
+                        <button onclick="exportTasks()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-download ml-2"></i>
+                            تصدير
+                        </button>
+                    </div>
+                    
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-chart-bar text-4xl text-blue-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير الإحصائيات</h3>
+                        <p class="text-gray-600 text-sm mb-4">تصدير الإحصائيات والتحليلات</p>
+                        <button onclick="exportStatistics()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-download ml-2"></i>
+                            تصدير
+                        </button>
+                    </div>
+                    
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-users text-4xl text-purple-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير المدربين</h3>
+                        <p class="text-gray-600 text-sm mb-4">تصدير بيانات المدربين والأقسام</p>
+                        <button onclick="exportTrainers()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-download ml-2"></i>
+                            تصدير
+                        </button>
+                    </div>
+                    
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-calendar-alt text-4xl text-orange-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير التقويم</h3>
+                        <p class="text-gray-600 text-sm mb-4">تصدير التقويم التدريبي والمواعيد</p>
+                        <button onclick="exportCalendar()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-download ml-2"></i>
+                            تصدير
+                        </button>
+                    </div>
+                    
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-clipboard-list text-4xl text-red-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير شامل</h3>
+                        <p class="text-gray-600 text-sm mb-4">تصدير تقرير شامل لجميع البيانات</p>
+                        <button onclick="exportComplete()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-download ml-2"></i>
+                            تصدير
+                        </button>
+                    </div>
+                    
+                    <div class="card p-6 text-center">
+                        <i class="fas fa-cog text-4xl text-gray-600 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">تقرير مخصص</h3>
+                        <p class="text-gray-600 text-sm mb-4">إنشاء تقرير مخصص حسب الحاجة</p>
+                        <button onclick="customReport()" class="btn-primary text-white py-2 px-4 rounded-lg w-full">
+                            <i class="fas fa-tools ml-2"></i>
+                            إنشاء
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentWeekNumber = 1;
+        let tasksData = [];
+        let departmentsData = [];
+        let trainersData = [];
+        
+        // Initialize localStorage with sample data
+        function initializeData() {
+            if (!localStorage.getItem('tasksData')) {
+                const sampleTasks = [
+                    {
+                        id: 1,
+                        title: 'تحديث المناهج التدريبية',
+                        description: 'مراجعة وتحديث المناهج التدريبية للفصل الدراسي الجديد',
+                        department: 'computer',
+                        priority: 'high',
+                        status: 'pending',
+                        dueDate: '2024-02-15',
+                        createdAt: '2024-01-10',
+                        completedAt: null,
+                        attachments: []
+                    },
+                    {
+                        id: 2,
+                        title: 'إعداد التقرير الشهري',
+                        description: 'إعداد التقرير الشهري لأداء المدربين',
+                        department: 'all',
+                        priority: 'medium',
+                        status: 'progress',
+                        dueDate: '2024-01-25',
+                        createdAt: '2024-01-08',
+                        completedAt: null,
+                        attachments: []
+                    },
+                    {
+                        id: 3,
+                        title: 'ورشة عمل تطوير المهارات',
+                        description: 'تنظيم ورشة عمل لتطوير مهارات المدربين',
+                        department: 'electrical',
+                        priority: 'low',
+                        status: 'completed',
+                        dueDate: '2024-01-20',
+                        createdAt: '2024-01-05',
+                        completedAt: '2024-01-18',
+                        attachments: ['https://example.com/report.pdf']
+                    }
+                ];
+                localStorage.setItem('tasksData', JSON.stringify(sampleTasks));
+            }
+            
+            if (!localStorage.getItem('departmentsData')) {
+                const sampleDepartments = [
+                    {
+                        id: 1,
+                        name: 'الحاسب الآلي',
+                        head: 'د. أحمد محمد',
+                        description: 'قسم تقنية المعلومات والحاسب الآلي',
+                        code: 'computer'
+                    },
+                    {
+                        id: 2,
+                        name: 'الكهرباء',
+                        head: 'د. محمد علي',
+                        description: 'قسم الهندسة الكهربائية',
+                        code: 'electrical'
+                    },
+                    {
+                        id: 3,
+                        name: 'الميكانيكا',
+                        head: 'د. علي أحمد',
+                        description: 'قسم الهندسة الميكانيكية',
+                        code: 'mechanical'
+                    },
+                    {
+                        id: 4,
+                        name: 'المدني',
+                        head: 'د. سالم خالد',
+                        description: 'قسم الهندسة المدنية',
+                        code: 'civil'
+                    }
+                ];
+                localStorage.setItem('departmentsData', JSON.stringify(sampleDepartments));
+            }
+            
+            if (!localStorage.getItem('trainersData')) {
+                const sampleTrainers = [
+                    {
+                        id: 1,
+                        name: 'أحمد سالم',
+                        department: 'computer',
+                        specialty: 'برمجة وتطوير',
+                        email: 'ahmed@college.edu.sa'
+                    },
+                    {
+                        id: 2,
+                        name: 'محمد عبدالله',
+                        department: 'electrical',
+                        specialty: 'الدوائر الكهربائية',
+                        email: 'mohammed@college.edu.sa'
+                    },
+                    {
+                        id: 3,
+                        name: 'خالد محمد',
+                        department: 'mechanical',
+                        specialty: 'التصميم الميكانيكي',
+                        email: 'khalid@college.edu.sa'
+                    },
+                    {
+                        id: 4,
+                        name: 'عبدالرحمن أحمد',
+                        department: 'civil',
+                        specialty: 'إنشاءات',
+                        email: 'abdulrahman@college.edu.sa'
+                    }
+                ];
+                localStorage.setItem('trainersData', JSON.stringify(sampleTrainers));
+            }
+        }
+        
+        // Load data from localStorage
+        function loadData() {
+            tasksData = JSON.parse(localStorage.getItem('tasksData')) || [];
+            departmentsData = JSON.parse(localStorage.getItem('departmentsData')) || [];
+            trainersData = JSON.parse(localStorage.getItem('trainersData')) || [];
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('tasksData', JSON.stringify(tasksData));
+            localStorage.setItem('departmentsData', JSON.stringify(departmentsData));
+            localStorage.setItem('trainersData', JSON.stringify(trainersData));
+        }
+        
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userType = document.getElementById('userType').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (userType && username && password) {
+                currentUser = {
+                    username: username,
+                    type: userType
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainApp();
+            } else {
+                alert('يرجى تعبئة جميع الحقول');
+            }
+        });
+        
+        // Show main application
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Set user welcome message
+            const userRoles = {
+                'deputy': 'وكيل الكلية لشؤون المدربين',
+                'head': 'رئيس قسم تدريبي',
+                'trainer': 'مدرب'
+            };
+            
+            document.getElementById('userWelcome').textContent = `مرحباً ${currentUser.username}`;
+            document.getElementById('userRole').textContent = userRoles[currentUser.type];
+            
+            // Load data and update dashboard
+            loadData();
+            updateDashboard();
+        }
+        
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+        }
+        
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load section specific data
+            if (sectionName === 'tasks') {
+                loadTasks();
+            } else if (sectionName === 'calendar') {
+                loadCalendar();
+            } else if (sectionName === 'statistics') {
+                loadStatistics();
+            } else if (sectionName === 'data') {
+                loadDataManagement();
+            }
+        }
+        
+        // Update dashboard
+        function updateDashboard() {
+            const totalTasks = tasksData.length;
+            const pendingTasks = tasksData.filter(task => task.status === 'pending').length;
+            const completedTasks = tasksData.filter(task => task.status === 'completed').length;
+            const totalTrainers = trainersData.length;
+            
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('pendingTasks').textContent = pendingTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('totalTrainers').textContent = totalTrainers;
+            
+            // Load recent tasks
+            const recentTasks = tasksData.slice(-5).reverse();
+            const recentTasksContainer = document.getElementById('recentTasks');
+            recentTasksContainer.innerHTML = '';
+            
+            recentTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-card status-${task.status} bg-white p-4 rounded-lg shadow-sm`;
+                taskElement.innerHTML = `
+                    <h4 class="font-medium text-gray-800">${task.title}</h4>
+                    <p class="text-sm text-gray-600 mt-1">${task.description.substring(0, 100)}...</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-xs px-2 py-1 rounded-full ${getStatusColor(task.status)}">${getStatusText(task.status)}</span>
+                        <span class="text-xs text-gray-500">${task.dueDate}</span>
+                    </div>
+                `;
+                recentTasksContainer.appendChild(taskElement);
+            });
+            
+            // Load progress chart
+            loadProgressChart();
+        }
+        
+        // Load progress chart
+        function loadProgressChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4', 'الأسبوع 5'],
+                    datasets: [{
+                        label: 'المهام المكتملة',
+                        data: [5, 12, 8, 15, 10],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Task management
+        function toggleTaskForm() {
+            const taskForm = document.getElementById('taskForm');
+            taskForm.classList.toggle('hidden');
+        }
+        
+        document.getElementById('newTaskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newTask = {
+                id: Date.now(),
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                department: document.getElementById('taskDepartment').value,
+                priority: document.getElementById('taskPriority').value,
+                status: 'pending',
+                dueDate: document.getElementById('taskDueDate').value,
+                createdAt: new Date().toISOString().split('T')[0],
+                completedAt: null,
+                attachments: []
+            };
+            
+            tasksData.push(newTask);
+            saveData();
+            loadTasks();
+            updateDashboard();
+            
+            // Reset form and hide
+            this.reset();
+            document.getElementById('taskForm').classList.add('hidden');
+            
+            alert('تم إضافة المهمة بنجاح');
+        });
+        
+        function loadTasks() {
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '';
+            
+            tasksData.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-card status-${task.status} bg-white p-6 rounded-lg shadow-sm`;
+                taskElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800">${task.title}</h3>
+                            <p class="text-sm text-gray-600 mt-1">${task.description}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <select onchange="updateTaskStatus(${task.id}, this.value)" class="text-sm border rounded px-2 py-1">
+                                <option value="pending" ${task.status === 'pending' ? 'selected' : ''}>معلقة</option>
+                                <option value="progress" ${task.status === 'progress' ? 'selected' : ''}>قيد التنفيذ</option>
+                                <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>مكتملة</option>
+                            </select>
+                            <button onclick="deleteTask(${task.id})" class="text-red-500 hover:text-red-700 text-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}">${getPriorityText(task.priority)}</span>
+                            <span class="text-xs px-2 py-1 rounded-full ${getStatusColor(task.status)}">${getStatusText(task.status)}</span>
+                        </div>
+                        <span class="text-sm text-gray-500">الاستحقاق: ${task.dueDate}</span>
+                    </div>
+                    ${task.status === 'completed' ? `
+                        <div class="mt-4 p-3 bg-green-50 rounded-lg">
+                            <label class="block text-sm font-medium text-green-800 mb-2">المرفقات:</label>
+                            <input type="url" placeholder="رابط المرفق" onchange="addAttachment(${task.id}, this.value)" class="w-full p-2 border rounded text-sm">
+                            <div class="mt-2 space-y-1">
+                                ${task.attachments.map(att => `<a href="${att}" target="_blank" class="text-blue-600 text-sm block hover:underline">${att}</a>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+                tasksList.appendChild(taskElement);
+            });
+        }
+        
+        function updateTaskStatus(taskId, newStatus) {
+            const task = tasksData.find(t => t.id === taskId);
+            if (task) {
+                task.status = newStatus;
+                if (newStatus === 'completed') {
+                    task.completedAt = new Date().toISOString().split('T')[0];
+                }
+                saveData();
+                loadTasks();
+                updateDashboard();
+            }
+        }
+        
+        function deleteTask(taskId) {
+            if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
+                tasksData = tasksData.filter(t => t.id !== taskId);
+                saveData();
+                loadTasks();
+                updateDashboard();
+            }
+        }
+        
+        function addAttachment(taskId, url) {
+            if (url) {
+                const task = tasksData.find(t => t.id === taskId);
+                if (task) {
+                    task.attachments.push(url);
+                    saveData();
+                    loadTasks();
+                }
+            }
+        }
+        
+        function filterTasks(status) {
+            const tasks = document.querySelectorAll('.task-card');
+            tasks.forEach(task => {
+                if (status === 'all') {
+                    task.style.display = 'block';
+                } else {
+                    if (task.classList.contains(`status-${status}`)) {
+                        task.style.display = 'block';
+                    } else {
+                        task.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // Calendar functionality
+        function loadCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'];
+            
+            days.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day bg-white p-4 rounded-lg';
+                dayElement.innerHTML = `
+                    <h3 class="font-medium text-gray-800 mb-2">${day}</h3>
+                    <div class="text-sm text-gray-600">
+                        <p>الأسبوع ${currentWeekNumber}</p>
+                        <div class="mt-2 space-y-1">
+                            ${getTasksForDay(day).map(task => `
+                                <div class="bg-blue-100 p-2 rounded text-xs">
+                                    ${task.title}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                calendar.appendChild(dayElement);
+            });
+        }
+        
+        function getTasksForDay(day) {
+            // Sample tasks for calendar display
+            return tasksData.filter(task => task.status === 'pending').slice(0, 2);
+        }
+        
+        function prevWeek() {
+            if (currentWeekNumber > 1) {
+                currentWeekNumber--;
+                document.getElementById('currentWeek').textContent = `الأسبوع ${currentWeekNumber}`;
+                loadCalendar();
+            }
+        }
+        
+        function nextWeek() {
+            if (currentWeekNumber < 18) {
+                currentWeekNumber++;
+                document.getElementById('currentWeek').textContent = `الأسبوع ${currentWeekNumber}`;
+                loadCalendar();
+            }
+        }
+        
+        // Statistics
+        function loadStatistics() {
+            loadTasksChart();
+            loadPerformanceChart();
+            loadDepartmentChart();
+        }
+        
+        function loadTasksChart() {
+            const ctx = document.getElementById('tasksChart').getContext('2d');
+            const pendingCount = tasksData.filter(task => task.status === 'pending').length;
+            const progressCount = tasksData.filter(task => task.status === 'progress').length;
+            const completedCount = tasksData.filter(task => task.status === 'completed').length;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['معلقة', 'قيد التنفيذ', 'مكتملة'],
+                    datasets: [{
+                        data: [pendingCount, progressCount, completedCount],
+                        backgroundColor: ['#fbbf24', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function loadPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو'],
+                    datasets: [{
+                        label: 'المهام المكتملة',
+                        data: [12, 19, 3, 5, 2],
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function loadDepartmentChart() {
+            const ctx = document.getElementById('departmentChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['الحاسب الآلي', 'الكهرباء', 'الميكانيكا', 'المدني'],
+                    datasets: [{
+                        label: 'معدل الأداء',
+                        data: [85, 92, 78, 88],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Data Management
+        function loadDataManagement() {
+            loadDepartmentsList();
+            loadTrainersList();
+        }
+        
+        document.getElementById('departmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newDepartment = {
+                id: Date.now(),
+                name: document.getElementById('departmentName').value,
+                head: document.getElementById('departmentHead').value,
+                description: document.getElementById('departmentDescription').value,
+                code: document.getElementById('departmentName').value.toLowerCase().replace(/\s+/g, '_')
+            };
+            
+            departmentsData.push(newDepartment);
+            saveData();
+            loadDepartmentsList();
+            this.reset();
+            alert('تم إضافة القسم بنجاح');
+        });
+        
+        document.getElementById('trainerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newTrainer = {
+                id: Date.now(),
+                name: document.getElementById('trainerName').value,
+                department: document.getElementById('trainerDepartment').value,
+                specialty: document.getElementById('trainerSpecialty').value,
+                email: document.getElementById('trainerEmail').value
+            };
+            
+            trainersData.push(newTrainer);
+            saveData();
+            loadTrainersList();
+            updateDashboard();
+            this.reset();
+            alert('تم إضافة المدرب بنجاح');
+        });
+        
+        function loadDepartmentsList() {
+            const departmentsList = document.getElementById('departmentsList');
+            departmentsList.innerHTML = '';
+            
+            departmentsData.forEach(dept => {
+                const deptElement = document.createElement('div');
+                deptElement.className = 'bg-gray-50 p-3 rounded-lg';
+                deptElement.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-gray-800">${dept.name}</h4>
+                            <p class="text-sm text-gray-600">رئيس القسم: ${dept.head}</p>
+                        </div>
+                        <button onclick="deleteDepartment(${dept.id})" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                departmentsList.appendChild(deptElement);
+            });
+        }
+        
+        function loadTrainersList() {
+            const trainersList = document.getElementById('trainersList');
+            trainersList.innerHTML = '';
+            
+            trainersData.forEach(trainer => {
+                const trainerElement = document.createElement('div');
+                trainerElement.className = 'bg-gray-50 p-3 rounded-lg';
+                trainerElement.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-gray-800">${trainer.name}</h4>
+                            <p class="text-sm text-gray-600">${trainer.specialty} - ${getDepartmentName(trainer.department)}</p>
+                        </div>
+                        <button onclick="deleteTrainer(${trainer.id})" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                trainersList.appendChild(trainerElement);
+            });
+        }
+        
+        function deleteDepartment(deptId) {
+            if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
+                departmentsData = departmentsData.filter(d => d.id !== deptId);
+                saveData();
+                loadDepartmentsList();
+            }
+        }
+        
+        function deleteTrainer(trainerId) {
+            if (confirm('هل أنت متأكد من حذف هذا المدرب؟')) {
+                trainersData = trainersData.filter(t => t.id !== trainerId);
+                saveData();
+                loadTrainersList();
+                updateDashboard();
+            }
+        }
+        
+        // Settings
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const settings = {
+                collegeName: document.getElementById('collegeName').value,
+                trainingWeeks: document.getElementById('trainingWeeks').value,
+                trainingStart: document.getElementById('trainingStart').value,
+                trainingEnd: document.getElementById('trainingEnd').value
+            };
+            
+            localStorage.setItem('systemSettings', JSON.stringify(settings));
+            alert('تم حفظ الإعدادات بنجاح');
+        });
+        
+        // Export functions
+        function exportTasks() {
+            const csvContent = generateTasksCSV();
+            downloadCSV(csvContent, 'tasks_report.csv');
+        }
+        
+        function exportStatistics() {
+            const csvContent = generateStatisticsCSV();
+            downloadCSV(csvContent, 'statistics_report.csv');
+        }
+        
+        function exportTrainers() {
+            const csvContent = generateTrainersCSV();
+            downloadCSV(csvContent, 'trainers_report.csv');
+        }
+        
+        function exportCalendar() {
+            const csvContent = generateCalendarCSV();
+            downloadCSV(csvContent, 'calendar_report.csv');
+        }
+        
+        function exportComplete() {
+            const csvContent = generateCompleteCSV();
+            downloadCSV(csvContent, 'complete_report.csv');
+        }
+        
+        function customReport() {
+            alert('ميزة التقرير المخصص قيد التطوير');
+        }
+        
+        function generateTasksCSV() {
+            let csv = 'العنوان,الوصف,القسم,الأولوية,الحالة,تاريخ الاستحقاق,تاريخ الإنشاء\n';
+            tasksData.forEach(task => {
+                csv += `"${task.title}","${task.description}","${getDepartmentName(task.department)}","${getPriorityText(task.priority)}","${getStatusText(task.status)}","${task.dueDate}","${task.createdAt}"\n`;
+            });
+            return csv;
+        }
+        
+        function generateStatisticsCSV() {
+            let csv = 'الإحصائية,القيمة\n';
+            csv += `"إجمالي المهام","${tasksData.length}"\n`;
+            csv += `"المهام المعلقة","${tasksData.filter(t => t.status === 'pending').length}"\n`;
+            csv += `"المهام قيد التنفيذ","${tasksData.filter(t => t.status === 'progress').length}"\n`;
+            csv += `"المهام المكتملة","${tasksData.filter(t => t.status === 'completed').length}"\n`;
+            csv += `"عدد المدربين","${trainersData.length}"\n`;
+            csv += `"عدد الأقسام","${departmentsData.length}"\n`;
+            return csv;
+        }
+        
+        function generateTrainersCSV() {
+            let csv = 'الاسم,القسم,التخصص,البريد الإلكتروني\n';
+            trainersData.forEach(trainer => {
+                csv += `"${trainer.name}","${getDepartmentName(trainer.department)}","${trainer.specialty}","${trainer.email}"\n`;
+            });
+            return csv;
+        }
+        
+        function generateCalendarCSV() {
+            let csv = 'الأسبوع,المهام المجدولة\n';
+            for (let i = 1; i <= 18; i++) {
+                csv += `"الأسبوع ${i}","${tasksData.filter(t => t.status === 'pending').length}"\n`;
+            }
+            return csv;
+        }
+        
+        function generateCompleteCSV() {
+            let csv = 'نوع البيانات,التفاصيل\n';
+            csv += '"=== المهام ===",""\n';
+            csv += generateTasksCSV();
+            csv += '\n"=== المدربون ===",""\n';
+            csv += generateTrainersCSV();
+            csv += '\n"=== الإحصائيات ===",""\n';
+            csv += generateStatisticsCSV();
+            return csv;
+        }
+        
+        function downloadCSV(csvContent, filename) {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Helper functions
+        function getStatusColor(status) {
+            switch (status) {
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                case 'progress': return 'bg-blue-100 text-blue-800';
+                case 'completed': return 'bg-green-100 text-green-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return 'معلقة';
+                case 'progress': return 'قيد التنفيذ';
+                case 'completed': return 'مكتملة';
+                default: return 'غير محدد';
+            }
+        }
+        
+        function getPriorityColor(priority) {
+            switch (priority) {
+                case 'high': return 'bg-red-100 text-red-800';
+                case 'medium': return 'bg-yellow-100 text-yellow-800';
+                case 'low': return 'bg-green-100 text-green-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        
+        function getPriorityText(priority) {
+            switch (priority) {
+                case 'high': return 'عالية';
+                case 'medium': return 'متوسطة';
+                case 'low': return 'منخفضة';
+                default: return 'غير محدد';
+            }
+        }
+        
+        function getDepartmentName(code) {
+            const departments = {
+                'computer': 'الحاسب الآلي',
+                'electrical': 'الكهرباء',
+                'mechanical': 'الميكانيكا',
+                'civil': 'المدني',
+                'all': 'جميع الأقسام'
+            };
+            return departments[code] || code;
+        }
+        
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            }
+        });
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDualVeLSOfoQLMCHSDvaGWTMFdMTHVF033KbrKzJpAOLGQgS6IzcHXtIL28bP7DAYR3xkeFCoZh0V%2BIhjVXlUmfh5pmC6GL%2BtCm5Nlm5qS4qsg8catoqorvmOaxUFfMoJnUSNTmD%2Bt%2BeQV2uejS2R29qRXjrZpXV4MkxoAuIOiPr3QDKBX43zbfsxtKMaOQpx2%2Bnw94tSK0E2qC9LUbpIPYCZu%2FMm0umpGSTMcApvbub3FpvIlDr5A1n8ZnpvXwFmzUEISpe5z1V4OSr4mpqPyJkXCdNmbW%2BWZoubvli%2BhcngHQByVwzUsz5q6rXl7JZQYe4KwpApGvLlK6JXZzifoiVb7AlBeRiazUrgyIpgy8c9meg6%2BsSa2aveVUmX%2FXd4Fkz88XhRa7ACtMOYkvfS6OGB0qCWlYpYGDRTQQj6NrNGhBJOrO2NPo1k0grbJZPYJMueZ3IRA9O3dPRO87inGtFyo%2BUZqPECINLzyl4tLa8NukVVPyo9xqB%2FD5SSbGXQq%2FcvjemI06UzGWQ41Hw4mg%3D";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDualVeLSOfoQLMCHSDvaGWTMFdMTHVF033KbrKzJpAOLGQgS6IzcHXtIL28bP7DAYR3xkeFCoZh0V+IhjVXlUmfh5pmC6GL+tCm5Nlm5qS4qsg8catoqorvmOaxUFfMoJnUSNTmD+t+eQV2uejS2R29qRXjrZpXV4MkxoAuIOiPr3QDKBX43zbfsxtKMaOQpx2+nw94tSK0E2qC9LUbpIPYCZu/Mm0umpGSTMcApvbub3FpvIlDr5A1n8ZnpvXwFmzUEISpe5z1V4OSr4mpqPyJkXCdNmbW+WZoubvli+hcngHQByVwzUsz5q6rXl7JZQYe4KwpApGvLlK6JXZzifoiVb7AlBeRiazUrgyIpgy8c9meg6+sSa2aveVUmX/Xd4Fkz88XhRa7ACtMOYkvfS6OGB0qCWlYpYGDRTQQj6NrNGhBJOrO2NPo1k0grbJZPYJMueZ3IRA9O3dPRO87inGtFyo+UZqPECINLzyl4tLa8NukVVPyo9xqB/D5SSbGXQq/cvjemI06UzGWQ41Hw4mg=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
